@@ -1,5 +1,37 @@
 
+Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment")
+
 local registry = {}
+local db
+
+function Accomplishment:OnEnable()
+	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { whisper = false, message = "Congratulations %s!" }}, "Default")
+
+	db = self.db.profile
+
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("Accomplishment", {
+		name = "Accomplishment",
+		desc = "Allows for easy congratulations for when someone earns an Achievement.",
+		type = "group",
+		get = function(key) return db[key.arg] end,
+		set = function(key, value) db[key.arg] = value end,
+		args = {
+			whisper = {
+				name = "Whisper User",
+				desc = "Send a congratulatory whisper to the user. Will use /say or /guild if disabled.",
+				type = "toggle", order = 1, arg = "whisper",
+			},
+			message = {
+				name = "Congratulatory Message",
+				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
+				type = "input", order = 2, arg = "message",
+			},
+		}, 
+	})
+
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
+end
+
 
 local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 F:Hide()
@@ -49,9 +81,16 @@ local function buttOnClick(self, button)
 	local user = self.text:GetText()
 
 	if button == "LeftButton" then
-		SendChatMessage("Congratulations "..user.."!", "GUILD")
+		local msg = db.message:format(user)
+
+		if self.type == "WHISPER" then
+			SendChatMessage(msg, self.type, GetDefaultLanguage("player"), user)
+		else
+			SendChatMessage(msg, self.type)
+		end
 	end
 
+	self.type = nil
 	registry[user] = nil
 	self:Hide()
 end
@@ -80,6 +119,12 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 	for user, _ in pairs(registry) do
 		local butt =  _G["AccomplishmentButton"..i]
 
+		if not db.whisper then
+			if event:find("_GUILD_") then butt.type = "GUILD" else butt.type = "SAY" end
+		else
+			butt.type = "WHISPER"
+		end
+
 		butt.text:SetText(user)
 		butt:Show()
 
@@ -92,4 +137,5 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 end)
 
 F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
+F:RegisterEvent("CHAT_MSG_ACHIEVEMENT")
 
