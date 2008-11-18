@@ -1,0 +1,10 @@
+## Interface: 30000
+## Title: Guild Achiever
+## Version: 1.0
+## Notes: Allows for easy congratulations for when a guildie earns an Achievement
+## Author: Ethan Centaurai
+## X-eMail: ethan.centaurai@live.co.uk
+## X-Donate: PayPal:ethan.centaurai@live.co.uk
+## X-Category: Guild
+
+Core.lua
