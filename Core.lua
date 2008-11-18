@@ -1,7 +1,7 @@
 
 local registry = {}
 
-local F = CreateFrame("Frame", "GuildAchieverFrame", UIParent)
+local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 F:Hide()
 F:SetWidth(180)
 F:SetHeight(260)
@@ -30,7 +30,7 @@ BG:SetHeight(70)
 
 local Title = F:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 Title:SetPoint("CENTER", F, "TOP", 0, -7)
-Title:SetText("Guild Achiever")
+Title:SetText("Accomplishment")
 
 local CB = CreateFrame("Button", nil, F, "UIPanelButtonTemplate")
 CB:SetPoint("BOTTOM", F, "BOTTOM", 0, 12)
@@ -39,7 +39,7 @@ CB:SetWidth(100)
 CB:SetText("Close")
 CB:SetScript("OnClick", function()
 	for key, value in pairs(registry) do registry[key] = nil end
-	for i=1, 10 do _G["GuildAchieverButton"..i]:Hide() end
+	for i=1, 10 do _G["AccomplishmentButton"..i]:Hide() end
 
 	F:Hide()
 end)
@@ -58,7 +58,7 @@ end
 
 
 for i=1, 10 do
-	local butt = CreateFrame("Button", "GuildAchieverButton"..i, F)
+	local butt = CreateFrame("Button", "AccomplishmentButton"..i, F)
 	butt:Hide()
 	butt:SetWidth(150)
 	butt:SetHeight(20)
@@ -78,7 +78,7 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 
 	local i = 1
 	for user, _ in pairs(registry) do
-		local butt =  _G["GuildAchieverButton"..i]
+		local butt =  _G["AccomplishmentButton"..i]
 
 		butt.text:SetText(user)
 		butt:Show()
@@ -92,3 +92,4 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 end)
 
 F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
+
