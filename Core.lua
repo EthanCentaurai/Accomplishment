@@ -154,7 +154,7 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 		i = i +1
 	end
 
-	F:SetHeight((20*i) +60)
+	F:SetHeight((20*i) +55)
 	F:Show()
 end)
 
