@@ -1,6 +1,8 @@
 
 Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment")
 
+local playerLanguage =  GetDefaultLanguage("player")
+local playerName = UnitName("player")
 local registry = {}
 local db
 
@@ -84,7 +86,7 @@ local function buttOnClick(self, button)
 		local msg = db.message:format(user)
 
 		if self.type == "WHISPER" then
-			SendChatMessage(msg, self.type, GetDefaultLanguage("player"), user)
+			SendChatMessage(msg, self.type, playerLanguage, user)
 		else
 			SendChatMessage(msg, self.type)
 		end
@@ -113,16 +115,18 @@ end
 
 
 F:SetScript("OnEvent", function(self, event, achievement, name)
+	if name == playerName then return end -- we don't want to congratulate ourselves 
+
 	registry[name] = true
 
 	local i = 1
 	for user, _ in pairs(registry) do
 		local butt =  _G["AccomplishmentButton"..i]
 
-		if not db.whisper then
-			if event:find("_GUILD_") then butt.type = "GUILD" else butt.type = "SAY" end
-		else
+		if db.whisper then
 			butt.type = "WHISPER"
+		else
+			if event:find("_GUILD_") then butt.type = "GUILD" else butt.type = "SAY" end
 		end
 
 		butt.text:SetText(user)
