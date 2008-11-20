@@ -7,7 +7,7 @@ local registry = {}
 local db
 
 function Accomplishment:OnEnable()
-	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { whisper = false, message = "Congratulations %s!" }}, "Default")
+	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { whisper = false, autoGrats = false, message = "Congratulations %s!" }}, "Default")
 
 	db = self.db.profile
 
@@ -23,15 +23,32 @@ function Accomplishment:OnEnable()
 				desc = "Send a congratulatory whisper to the user. Will use /say or /guild if disabled.",
 				type = "toggle", order = 1, arg = "whisper",
 			},
+			autoGrats = {
+				name = "Automatically Congratulate",
+				desc = "Automatically congratulate those who earn Achievements instead of clicking on a button.",
+				type = "toggle", order = 2, arg = "autoGrats",
+			},
 			message = {
 				name = "Congratulatory Message",
 				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
-				type = "input", order = 2, arg = "message",
+				type = "input", order = 3, arg = "message",
 			},
 		}, 
 	})
 
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
+end
+
+function Accomplishment:Congratulate(channel, name)
+	local message = db.message:format(name)
+
+	if channel == "WHISPER" then
+		SendChatMessage(message, channel, playerLanguage, name)
+	else
+		SendChatMessage(message, channel)
+	end
+
+	registry[name] = nil
 end
 
 
@@ -83,17 +100,12 @@ local function buttOnClick(self, button)
 	local user = self.text:GetText()
 
 	if button == "LeftButton" then
-		local msg = db.message:format(user)
-
-		if self.type == "WHISPER" then
-			SendChatMessage(msg, self.type, playerLanguage, user)
-		else
-			SendChatMessage(msg, self.type)
-		end
+		Accomplishment:Congratulate(self.type, user)
+	else
+		registry[user] = nil
 	end
 
 	self.type = nil
-	registry[user] = nil
 	self:Hide()
 end
 
@@ -119,16 +131,22 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 
 	registry[name] = true
 
+	local channel
+	if db.whisper then channel = "WHISPER"
+	else
+		if event:find("_GUILD_") then channel = "GUILD" else channel = "SAY" end
+	end
+
+	if db.autoGrats then
+		Accomplishment:Congratulate(channel, name)
+		return
+	end
+
 	local i = 1
 	for user, _ in pairs(registry) do
 		local butt =  _G["AccomplishmentButton"..i]
 
-		if db.whisper then
-			butt.type = "WHISPER"
-		else
-			if event:find("_GUILD_") then butt.type = "GUILD" else butt.type = "SAY" end
-		end
-
+		butt.type = channel
 		butt.text:SetText(user)
 		butt:Show()
 
