@@ -6,52 +6,6 @@ local playerName = UnitName("player")
 local registry = {}
 local db
 
-function Accomplishment:OnEnable()
-	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { whisper = false, autoGrats = false, message = "Congratulations %s!" }}, "Default")
-
-	db = self.db.profile
-
-	LibStub("AceConfig-3.0"):RegisterOptionsTable("Accomplishment", {
-		name = "Accomplishment",
-		desc = "Allows for easy congratulations for when someone earns an Achievement.",
-		type = "group",
-		get = function(key) return db[key.arg] end,
-		set = function(key, value) db[key.arg] = value end,
-		args = {
-			whisper = {
-				name = "Whisper User",
-				desc = "Send a congratulatory whisper to the user. Will use /say or /guild if disabled.",
-				type = "toggle", order = 1, arg = "whisper",
-			},
-			autoGrats = {
-				name = "Automatically Congratulate",
-				desc = "Automatically congratulate those who earn Achievements instead of clicking on a button.",
-				type = "toggle", order = 2, arg = "autoGrats",
-			},
-			message = {
-				name = "Congratulatory Message",
-				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
-				type = "input", order = 3, arg = "message",
-			},
-		}, 
-	})
-
-	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
-end
-
-function Accomplishment:Congratulate(channel, name)
-	local message = db.message:format(name)
-
-	if channel == "WHISPER" then
-		SendChatMessage(message, channel, playerLanguage, name)
-	else
-		SendChatMessage(message, channel)
-	end
-
-	registry[name] = nil
-end
-
-
 local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 F:Hide()
 F:SetWidth(180)
@@ -158,6 +112,74 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 	F:Show()
 end)
 
-F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
-F:RegisterEvent("CHAT_MSG_ACHIEVEMENT")
+
+function Accomplishment:OnEnable()
+	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { guildieGrats = true, strangerGrats = false, whisper = false, autoGrats = false, message = "Congratulations %s!" }}, "Default")
+
+	db = self.db.profile
+
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("Accomplishment", {
+		name = "Accomplishment",
+		desc = "Allows for easy congratulations for when someone earns an Achievement.",
+		type = "group",
+		get = function(key) return db[key.arg] end,
+		set = function(key, value) db[key.arg] = value end,
+		args = {
+			guildieGrats = {
+				name = "Congratulate Guildies",
+				desc = "Congratulate members of your guild when they earn Achievements.",
+				type = "toggle", order = 1, arg = "guildieGrats",
+				set = function(_, value)
+					db.guildieGrats = value
+
+					if value then F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
+					else F:UnregisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
+				end,
+			},
+			strangerGrats = {
+				name = "Congratulate Strangers",
+				desc = "Congratulate the random players around you when they earn Achievements.",
+				type = "toggle", order = 2, arg = "strangerGrats",
+				set = function(_, value)
+					db.strangerGrats = value
+
+					if value then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT")
+					else F:UnregisterEvent("CHAT_MSG_ACHIEVEMENT") end
+				end,
+			},
+			whisper = {
+				name = "Whisper User",
+				desc = "Send a congratulatory whisper to the user. Will use /say or /guild if disabled.",
+				type = "toggle", order = 3, arg = "whisper",
+			},
+			autoGrats = {
+				name = "Automatically Congratulate",
+				desc = "Automatically congratulate those who earn Achievements instead of clicking on a button.",
+				type = "toggle", order = 4, arg = "autoGrats",
+			},
+			message = {
+				name = "Congratulatory Message",
+				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
+				type = "input", order = 5, arg = "message",
+			},
+		}, 
+	})
+
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
+
+	if db.guildieGrats then F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
+	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
+end
+
+function Accomplishment:Congratulate(channel, name)
+	local message = db.message:format(name)
+
+	if channel == "WHISPER" then
+		SendChatMessage(message, channel, playerLanguage, name)
+	else
+		SendChatMessage(message, channel)
+	end
+
+	registry[name] = nil
+end
 
