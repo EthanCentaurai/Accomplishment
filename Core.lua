@@ -4,7 +4,7 @@ Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment")
 local playerLanguage =  GetDefaultLanguage("player")
 local playerName = UnitName("player")
 local registry = {}
-local db
+local db, numShown
 
 local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 F:Hide()
@@ -61,6 +61,10 @@ local function buttOnClick(self, button)
 
 	self.type = nil
 	self:Hide()
+
+	numShown = numShown -1
+
+	if numShown <= 0 then F:Hide() end
 end
 
 
@@ -103,6 +107,8 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 		butt.type = channel
 		butt.text:SetText(user)
 		butt:Show()
+
+		numShown = i
 
 		if i == 10 then break end -- bail out on the 10th name as we only have 10 buttons
 		i = i +1
