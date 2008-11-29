@@ -68,22 +68,6 @@ local function buttOnClick(self, button)
 end
 
 
-for i=1, 10 do
-	local butt = CreateFrame("Button", "AccomplishmentButton"..i, F)
-	butt:Hide()
-	butt:SetWidth(150)
-	butt:SetHeight(20)
-	butt:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
-	butt:SetPoint("TOP", F, "TOP", 0, (-20*i) -5)
-	butt:RegisterForClicks("LeftButtonDown", "RightButtonDown")
-	butt:SetScript("OnClick", buttOnClick)
-
-	local text = butt:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	butt.text = text
-	text:SetPoint("CENTER", butt, "CENTER")
-end
-
-
 F:SetScript("OnEvent", function(self, event, achievement, name)
 	if name == playerName then return end -- we don't want to congratulate ourselves 
 
@@ -110,7 +94,7 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 
 		numShown = i
 
-		if i == 10 then break end -- bail out on the 10th name as we only have 10 buttons
+		if i == db.numToShow then break end -- bail out if we've used all the available buttons
 		i = i +1
 	end
 
@@ -119,8 +103,8 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 end)
 
 
-function Accomplishment:OnEnable()
-	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { guildieGrats = true, strangerGrats = false, whisper = false, autoGrats = false, message = "Congratulations %s!" }}, "Default")
+function Accomplishment:OnInitialize()
+	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { guildieGrats = true, strangerGrats = false, whisper = false, autoGrats = false, message = "Congratulations %s!", numToShow = 10 }}, "Default")
 
 	db = self.db.profile
 
@@ -168,10 +152,31 @@ function Accomplishment:OnEnable()
 				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
 				type = "input", order = 5, arg = "message",
 			},
+			numToShow = {
+				name = "Number of People",
+				desc = "Choose the maximum number of people to display in the window.",
+				type = "range", order = 6, arg = "numToShow",
+				min = 1, max = 50, step = 1,
+			},	
 		}, 
 	})
 
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
+
+	for i=1, db.numToShow do
+		local butt = CreateFrame("Button", "AccomplishmentButton"..i, F)
+		butt:Hide()
+		butt:SetWidth(150)
+		butt:SetHeight(20)
+		butt:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
+		butt:SetPoint("TOP", F, "TOP", 0, (-20*i) -5)
+		butt:RegisterForClicks("LeftButtonDown", "RightButtonDown")
+		butt:SetScript("OnClick", buttOnClick)
+
+		local text = butt:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+		butt.text = text
+		text:SetPoint("CENTER", butt, "CENTER")
+	end
 
 	if db.guildieGrats then F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
 	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
