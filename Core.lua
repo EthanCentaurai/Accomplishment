@@ -181,19 +181,6 @@ function Accomplishment:OnEnable()
 	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
 
 	F:SetScript("OnEvent", OnEvent)
-
-	-- DEBUG --
-	OnEvent(F, "", nil, "Test Subject")
-	OnEvent(F, "", nil, "Steve")
-	OnEvent(F, "", nil, "Ethan")
-	OnEvent(F, "", nil, "Lucaria")
-	OnEvent(F, "", nil, "Imakuni")
-	OnEvent(F, "", nil, "Greyhammer")
-	OnEvent(F, "", nil, "Kunisan")
-	OnEvent(F, "", nil, "Myrah")
-	OnEvent(F, "", nil, "Centaurai")
-	OnEvent(F, "", nil, "Rhaeth")
-	-- END DEBUG --
 end
 
 function Accomplishment:Congratulate(channel, name)
