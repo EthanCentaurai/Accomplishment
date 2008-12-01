@@ -44,7 +44,7 @@ CB:SetWidth(100)
 CB:SetText("Close")
 CB:SetScript("OnClick", function()
 	for key, value in pairs(registry) do registry[key] = nil end
-	for i=1, 10 do _G["AccomplishmentButton"..i]:Hide() end
+	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
 	F:Hide()
 end)
@@ -67,9 +67,8 @@ local function buttOnClick(self, button)
 	if numShown <= 0 then F:Hide() end
 end
 
-
-F:SetScript("OnEvent", function(self, event, achievement, name)
-	if name == playerName then return end -- we don't want to congratulate ourselves 
+local function OnEvent(self, event, achievement, name)
+	if name == playerName then return end -- we don't want to congratulate ourselves
 
 	registry[name] = true
 
@@ -98,13 +97,13 @@ F:SetScript("OnEvent", function(self, event, achievement, name)
 		i = i +1
 	end
 
-	F:SetHeight((20*i) +45)
+	F:SetHeight((20*numShown) +60)
 	F:Show()
-end)
+end
 
 
-function Accomplishment:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { guildieGrats = true, strangerGrats = false, whisper = false, autoGrats = false, message = "Congratulations %s!", numToShow = 10 }}, "Default")
+function Accomplishment:OnEnable()
+	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { guildieGrats = true, strangerGrats = false, whisper = false, autoGrats = false, message = "Congratulations %s!", numToShow = 5 }}, "Default")
 
 	db = self.db.profile
 
@@ -154,16 +153,16 @@ function Accomplishment:OnInitialize()
 			},
 			numToShow = {
 				name = "Number of People",
-				desc = "Choose the maximum number of people to display in the window.",
+				desc = "Choose the maximum number of people to display in the window. This will take effect the next time the window opens.",
 				type = "range", order = 6, arg = "numToShow",
-				min = 1, max = 50, step = 1,
+				min = 1, max = 20, step = 1,
 			},	
 		}, 
 	})
 
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
 
-	for i=1, db.numToShow do
+	for i=1, 20 do
 		local butt = CreateFrame("Button", "AccomplishmentButton"..i, F)
 		butt:Hide()
 		butt:SetWidth(150)
@@ -180,6 +179,21 @@ function Accomplishment:OnInitialize()
 
 	if db.guildieGrats then F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
 	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
+
+	F:SetScript("OnEvent", OnEvent)
+
+	-- DEBUG --
+	OnEvent(F, "", nil, "Test Subject")
+	OnEvent(F, "", nil, "Steve")
+	OnEvent(F, "", nil, "Ethan")
+	OnEvent(F, "", nil, "Lucaria")
+	OnEvent(F, "", nil, "Imakuni")
+	OnEvent(F, "", nil, "Greyhammer")
+	OnEvent(F, "", nil, "Kunisan")
+	OnEvent(F, "", nil, "Myrah")
+	OnEvent(F, "", nil, "Centaurai")
+	OnEvent(F, "", nil, "Rhaeth")
+	-- END DEBUG --
 end
 
 function Accomplishment:Congratulate(channel, name)
