@@ -50,6 +50,28 @@ CB:SetScript("OnClick", function()
 end)
 
 
+local function updateDisplay() -- ugly hackjob, but it should work
+	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
+
+	local i = 1
+	for user, _ in pairs(registry) do
+		local butt =  _G["AccomplishmentButton"..i]
+
+		butt.type = channel
+		butt.text:SetText(user)
+		butt:Show()
+
+		numShown = i
+
+		if i == db.numToShow then break end -- bail out if we've used all the available buttons
+		i = i +1
+	end
+
+	F:SetHeight((20*numShown) +60)
+	F:Show()
+end
+
+
 local function buttOnClick(self, button)
 	local user = self.text:GetText()
 
@@ -62,7 +84,7 @@ local function buttOnClick(self, button)
 	self.type = nil
 	self:Hide()
 
-	numShown = numShown -1
+	updateDisplay()
 
 	if numShown <= 0 then F:Hide() end
 end
@@ -83,22 +105,7 @@ local function OnEvent(self, event, achievement, name)
 		return
 	end
 
-	local i = 1
-	for user, _ in pairs(registry) do
-		local butt =  _G["AccomplishmentButton"..i]
-
-		butt.type = channel
-		butt.text:SetText(user)
-		butt:Show()
-
-		numShown = i
-
-		if i == db.numToShow then break end -- bail out if we've used all the available buttons
-		i = i +1
-	end
-
-	F:SetHeight((20*numShown) +60)
-	F:Show()
+	updateDisplay()
 end
 
 
