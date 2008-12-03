@@ -54,45 +54,46 @@ local function updateDisplay() -- ugly hackjob, but it should work
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
 	local i = 1
-	for user, _ in pairs(registry) do
+	for name, channel in pairs(registry) do
 		local butt =  _G["AccomplishmentButton"..i]
 
-		butt.type = channel
-		butt.text:SetText(user)
+		butt.type = channel or "SAY"
+		butt.text:SetText(name)
 		butt:Show()
-
-		numShown = i
 
 		if i == db.numToShow then break end -- bail out if we've used all the available buttons
 		i = i +1
 	end
 
-	F:SetHeight((20*numShown) +60)
-	F:Show()
+	numShown = i -1
+
+	print(numShown)
+
+	if numShown >= 1 then
+		F:SetHeight((20*numShown) +60)
+		F:Show()
+	else
+		F:Hide()
+	end
 end
 
-
 local function buttOnClick(self, button)
-	local user = self.text:GetText()
+	local name = self.text:GetText()
 
 	if button == "LeftButton" then
-		Accomplishment:Congratulate(self.type, user)
+		Accomplishment:Congratulate(name, self.type)
 	else
-		registry[user] = nil
+		registry[name] = nil
 	end
 
 	self.type = nil
 	self:Hide()
 
 	updateDisplay()
-
-	if numShown <= 0 then F:Hide() end
 end
 
 local function OnEvent(self, event, achievement, name)
 	if name == playerName then return end -- we don't want to congratulate ourselves
-
-	registry[name] = true
 
 	local channel
 	if db.whisper then channel = "WHISPER"
@@ -101,10 +102,11 @@ local function OnEvent(self, event, achievement, name)
 	end
 
 	if db.autoGrats then
-		Accomplishment:Congratulate(channel, name)
+		Accomplishment:Congratulate(name, channel)
 		return
 	end
 
+	registry[name] = channel
 	updateDisplay()
 end
 
@@ -188,9 +190,17 @@ function Accomplishment:OnEnable()
 	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
 
 	F:SetScript("OnEvent", OnEvent)
+
+	-- DEBUG --
+	OnEvent(F, "", nil, "Lucaria")
+	OnEvent(F, "", nil, "Imakuni")
+	OnEvent(F, "", nil, "Kiyomi")
+	OnEvent(F, "", nil, "Greyhammer")
+	OnEvent(F, "", nil, "Myrah")
+	-- END DEBUG --
 end
 
-function Accomplishment:Congratulate(channel, name)
+function Accomplishment:Congratulate(name, channel)
 	local message = db.message:format(name)
 
 	if channel == "WHISPER" then
