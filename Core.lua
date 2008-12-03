@@ -50,7 +50,7 @@ CB:SetScript("OnClick", function()
 end)
 
 
-local function updateDisplay() -- ugly hackjob, but it should work
+local function updateDisplay() -- ugly hackjob, but it Works(TM)
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
 	local i = 1
@@ -66,8 +66,6 @@ local function updateDisplay() -- ugly hackjob, but it should work
 	end
 
 	numShown = i -1
-
-	print(numShown)
 
 	if numShown >= 1 then
 		F:SetHeight((20*numShown) +60)
@@ -190,14 +188,6 @@ function Accomplishment:OnEnable()
 	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
 
 	F:SetScript("OnEvent", OnEvent)
-
-	-- DEBUG --
-	OnEvent(F, "", nil, "Lucaria")
-	OnEvent(F, "", nil, "Imakuni")
-	OnEvent(F, "", nil, "Kiyomi")
-	OnEvent(F, "", nil, "Greyhammer")
-	OnEvent(F, "", nil, "Myrah")
-	-- END DEBUG --
 end
 
 function Accomplishment:Congratulate(name, channel)
