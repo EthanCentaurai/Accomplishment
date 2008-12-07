@@ -1,7 +1,7 @@
 ## Interface: 30000
 ## Title: Accomplishment
 ## Version: @project-version@
-## Notes: Allows for easy congratulations for when someone earns an Achievement. (formally known as Guild Achiever)
+## Notes: Allows for easy congratulations for when someone earns an Achievement
 ## Author: Ethan Centaurai
 ## X-eMail: ethan.centaurai@live.co.uk
 ## X-Donate: PayPal:ethan.centaurai@live.co.uk
