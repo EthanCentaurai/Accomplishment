@@ -1,14 +1,13 @@
 ## Interface: 30000
 ## Title: Accomplishment
-## Version: v2.0.4
-## Notes: Allows for easy congratulations for when someone earns an Achievement. (formally known as Guild Achiever)
+## Version: @project-version@
+## Notes: Allows for easy congratulations for when someone earns an Achievement.
 ## Author: Ethan Centaurai
 ## X-eMail: ethan.centaurai@live.co.uk
 ## X-Donate: PayPal:ethan.centaurai@live.co.uk
 ## X-Category: Chat/Communication
 ## SavedVariables: AccomplishmentDB
 ## OptionalDeps: Ace3
-## X-Curse-Packaged-Version: v2.0.4
 
 #@no-lib-strip@
 Lib\LibStub\LibStub.lua
@@ -17,6 +16,7 @@ Lib\AceAddon-3.0\AceAddon-3.0.lua
 Lib\AceDB-3.0\AceDB-3.0.lua
 Lib\AceGUI-3.0\AceGUI-3.0.xml
 Lib\AceConfig-3.0\AceConfig-3.0.xml
+Lib\AceTimer-3.0\AceTimer-3.0.xml
 #@end-no-lib-strip@
 
 Core.lua
