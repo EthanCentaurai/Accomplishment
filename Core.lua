@@ -4,7 +4,7 @@ Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment", "AceTimer-3.
 local playerLanguage =  GetDefaultLanguage("player")
 local playerName = UnitName("player")
 local registry = {}
-local db, numShown
+local db, numShown, timer
 
 local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 F:Hide()
@@ -53,8 +53,10 @@ end)
 local function updateDisplay() -- ugly hackjob, but it Works(TM)
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
-	local i = 1
+	local i = 0
 	for name, channel in pairs(registry) do
+		i = i +1
+
 		local butt =  _G["AccomplishmentButton"..i]
 
 		butt.type = channel or "SAY"
@@ -62,10 +64,9 @@ local function updateDisplay() -- ugly hackjob, but it Works(TM)
 		butt:Show()
 
 		if i == db.numToShow then break end -- bail out if we've used all the available buttons
-		i = i +1
 	end
 
-	numShown = i -1
+	numShown = i
 
 	if numShown >= 1 then
 		F:SetHeight((20*numShown) +60)
@@ -102,7 +103,7 @@ local function OnEvent(self, event, achievement, name)
 	registry[name] = channel
 
 	if db.autoGrats then
-		Accomplishment:Congratulate(name, channel)
+		Accomplishment:Congratulate(name, channel, true)
 		return
 	end
 
@@ -195,61 +196,72 @@ end
 -- /script Accomplishment:Congratulate("Syl", "SAY")
 -- /script Accomplishment:Congratulate("Syl", "SAY") Accomplishment:Congratulate("Syl2", "SAY")
 -- /script Accomplishment:Congratulate("Syl", "SAY") Accomplishment:Congratulate("Syl2", "SAY") Accomplishment:Congratulate("Syl3", "SAY")
-function Accomplishment:Congratulate(name, channel)
-    registry[name] = channel
-    if not self.contimer then 
-        self.contimer = self:ScheduleTimer("CongratulateThrottle", 3)
-    end
+function Accomplishment:Congratulate(name, channel, auto)
+	if auto then
+		if not timer then
+			timer = self:ScheduleTimer("Throttle", 3)
+		end
+	else
+		local message = db.message:format(name)
+
+		if channel == "WHISPER" then
+			SendChatMessage(message, channel, playerLanguage, name)
+		else
+			SendChatMessage(message, channel)
+		end
+
+		registry[name] = nil
+		updateDisplay()
+	end
 end
 
 local channels = {}
-function Accomplishment:CongratulateThrottle()
-    self.contimer = nil
+function Accomplishment:Throttle()
+	timer = nil
 
-    --Prat.PrintLiteral(registry)
+--	Prat.PrintLiteral(registry)
 
-    wipe(channels)
-    for k,v in pairs(registry) do 
-        channels[v] = channels[v] or {}
-        local c = channels[v]        
-        c[#c+1] = k
-    end 
+	wipe(channels)
+
+	for k, v in pairs(registry) do 
+		channels[v] = channels[v] or {}
+
+		local c = channels[v]        
+		c[#c+1] = k
+	end 
     
-    --Prat.PrintLiteral(channels)
+--	Prat.PrintLiteral(channels)
 
-    local channel, names = next(channels)
+	local channel, names = next(channels)
 
-    if not channel then return end
+	if not channel then return end
 
-    channels[channel] = nil
+	channels[channel] = nil
 
-    if #names > db.numToShow then
-        local COLLECTIVE_NAME = "guys"
-    	local message = db.message:format(COLLECTIVE_NAME)
+	if #names > db.numToShow then
+		local message = db.message:format("guys")
     
-    	if channel ~= "WHISPER" then
-    		SendChatMessage(message, channel)
-    	end
-    elseif #names > 1 and #names<db.numToShow then
-            SendChatMessage(db.message:format(table.concat(names, ", ")), channel)
-    else
-        for i, name in pairs(names) do
-    
-        	local message = db.message:format(name)
+		if channel ~= "WHISPER" then
+			SendChatMessage(message, channel)
+		end
+	elseif #names > 1 and #names < db.numToShow then
+		SendChatMessage(db.message:format(table.concat(names, ", ")), channel)
+	else
+		for i, name in pairs(names) do
+			local message = db.message:format(name)
         
-        	if channel == "WHISPER" then
-        		SendChatMessage(message, channel, playerLanguage, name)
-        	else
-        		SendChatMessage(message, channel)
-        	end
-        end
-    end
+			if channel == "WHISPER" then
+				SendChatMessage(message, channel, playerLanguage, name)
+			else
+				SendChatMessage(message, channel)
+			end
+		end
+	end
 
-    
-    for k,v in pairs(names) do registry[v] = nil end
+	for k, v in pairs(names) do registry[v] = nil end
 
-    if next(channels) then
-        self.contimer = self:ScheduleTimer("CongratulateThrottle", 3)
-    end
+	if next(channels) then
+		timer = self:ScheduleTimer("Throttle", 3)
+	end
 end
 
