@@ -37,16 +37,30 @@ local Title = F:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 Title:SetPoint("CENTER", F, "TOP", 0, -7)
 Title:SetText("Accomplishment")
 
-local CB = CreateFrame("Button", nil, F, "UIPanelButtonTemplate")
-CB:SetPoint("BOTTOM", F, "BOTTOM", 0, 12)
-CB:SetHeight(20)
-CB:SetWidth(100)
-CB:SetText("Close")
-CB:SetScript("OnClick", function()
+
+local function close()
 	for key, value in pairs(registry) do registry[key] = nil end
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
 	F:Hide()
+end
+
+
+local CB = CreateFrame("Button", nil, F, "UIPanelButtonTemplate")
+CB:SetPoint("BOTTOMLEFT", F, "BOTTOM", 0, 12)
+CB:SetHeight(20)
+CB:SetWidth(70)
+CB:SetText("Close")
+CB:SetScript("OnClick", close)
+
+local AB = CreateFrame("Button", nil, F, "UIPanelButtonTemplate")
+AB:SetPoint("BOTTOMRIGHT", F, "BOTTOM", 0, 12)
+AB:SetHeight(20)
+AB:SetWidth(70)
+AB:SetText("All")
+AB:SetScript("OnClick", function()
+	Accomplishment:Congratulate("guys")
+	close()
 end)
 
 
@@ -69,6 +83,9 @@ local function updateDisplay() -- ugly hackjob, but it Works(TM)
 	numShown = i
 
 	if numShown >= 1 then
+		if numShown > 1 then AB:Enable()
+		else AB:Disable() end
+
 		F:SetHeight((20*numShown) +60)
 		F:Show()
 	else
