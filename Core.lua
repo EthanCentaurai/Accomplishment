@@ -172,17 +172,17 @@ function Accomplishment:OnEnable()
 				desc = "Automatically congratulate those who earn Achievements instead of clicking on a button.",
 				type = "toggle", order = 4, arg = "autoGrats",
 			},
-			message = {
-				name = "Congratulatory Message",
-				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
-				type = "input", order = 5, arg = "message",
-			},
 			numToShow = {
 				name = "Number of People",
 				desc = "Choose the maximum number of people to display in the window. This will take effect the next time the window opens.",
-				type = "range", order = 6, arg = "numToShow",
+				type = "range", order = 5, arg = "numToShow",
 				min = 1, max = 20, step = 1,
-			},	
+			},
+			message = {
+				name = "Congratulatory Message",
+				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
+				type = "input", width = "full", order = 6, arg = "message",
+			},
 		}, 
 	})
 
