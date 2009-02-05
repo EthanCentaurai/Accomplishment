@@ -59,7 +59,7 @@ AB:SetHeight(20)
 AB:SetWidth(70)
 AB:SetText("All")
 AB:SetScript("OnClick", function()
-	Accomplishment:Congratulate("guys")
+	Accomplishment:Throttle()
 	close()
 end)
 
