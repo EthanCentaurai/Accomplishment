@@ -1,4 +1,3 @@
-package-as: Accomplishment
 
 externals:
    Lib/LibStub: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
@@ -8,4 +7,8 @@ externals:
    Lib/AceDB-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
    Lib/AceGUI-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
    Lib/AceTimer-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceTimer-3.0
+
+manual-changelog: CHANGELOG.txt
+
+license-output: LICENSE.txt
 
