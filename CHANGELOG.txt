@@ -1,0 +1,36 @@
+Version 2.1.1
+- Add an "All" button to manually congratulate everyone in the list (button is disabled if only one name is shown).
+- Move "Congratulatory Message" option to the bottom, increase width to "full". Thanks Sylcan!
+
+Version 2.1.0
+- Automatic congratulating has had an overhaul! A huge thanks to Sylvanaar for your help with this update!
+- If multiple players earn Achievements at once and the amount doing so is less than your chosen maximum of shown names, the addon will congratulate them with their names concatenated together (e.g. Congratulations Kiyomi, Sylvaan, Cairenn!)
+- If the amount is more than your chosen maximum, the addon will congratulate them all and refer to them as "guys" (e.g. Congratulations guys!)
+- Automatic congratulations will be sent 3 seconds after the Achievement is earned, to appear less like a bot.
+
+Version 2.0.4
+- Added option to choose the number of names shown in the list (minimum is 1, maximum is 20).
+- Added dynamic frame resizing.
+
+Version 2.0.3
+- The window will now close itself when all the names have been clicked on.
+
+Version 2.0.2
+- You can now choose whether to congratulate only your guildies, only the people around you, or everyone.
+
+Version 2.0.1b
+- Fix stupid typos causing may things to die.
+
+Version 2.0.1
+- Add option to automatically congratulate someone if you don't want to click on their names in a window.
+- Fixed bug where you could congratulate yourself when you earn an Achievement.
+- Tweaked window height a smidge.
+
+Version 2.0
+- Major re-write! w00t!
+- Add options to use say, guild, or whisper channels to congratulate with. As a result, we can now congratulate people outside of your guild when they get an Achievement. Options panel can be found in Interface -> AddOns -> Accomplishment.
+- Congratulatory message is now customisable.
+- Fixed zip file path integrity (oops!).
+
+Version 1.0
+- Initial release.
