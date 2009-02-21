@@ -1,6 +1,6 @@
 Version 2.1.1
 - Add an "All" button to manually congratulate everyone in the list (button is disabled if only one name is shown).
-- Move "Congratulatory Message" option to the bottom, increase width to "full". Thanks Sylcan!
+- Move "Congratulatory Message" option to the bottom, increase width to "full".
 
 Version 2.1.0
 - Automatic congratulating has had an overhaul! A huge thanks to Sylvanaar for your help with this update!
