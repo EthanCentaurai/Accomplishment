@@ -261,7 +261,7 @@ function Accomplishment:Throttle()
 		if channel ~= "WHISPER" then
 			SendChatMessage(message, channel)
 		end
-	elseif #names > 1 and #names < db.numToShow then
+	elseif #names > 1 and #names <= db.numToShow then
 		SendChatMessage(db.message:format(table.concat(names, ", ")), channel)
 	else
 		for i, name in pairs(names) do
@@ -281,4 +281,3 @@ function Accomplishment:Throttle()
 		timer = self:ScheduleTimer("Throttle", 3)
 	end
 end
-

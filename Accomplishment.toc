@@ -20,4 +20,3 @@ Lib\AceTimer-3.0\AceTimer-3.0.lua
 #@end-no-lib-strip@
 
 Core.lua
-
