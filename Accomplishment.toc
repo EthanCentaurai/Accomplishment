@@ -1,11 +1,8 @@
-## Interface: 30000
+﻿## Interface: 30100
 ## Title: Accomplishment
-## Version: @project-version@
-## Notes: Allows for easy congratulating when someone earns an Achievement.
+## Notes: Allows for easy congratulating when someone earns an Achievement
 ## Author: Ethan Centaurai
-## X-eMail: ethan.centaurai@live.co.uk
-## X-Donate: PayPal:ethan.centaurai@live.co.uk
-## X-Category: Chat/Communication
+## Version: 2.1.2
 ## SavedVariables: AccomplishmentDB
 ## OptionalDeps: Ace3
 

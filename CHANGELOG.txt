@@ -1,3 +1,6 @@
+Version 2.1.2
+- Updated for WoW 3.1.0.
+
 Version 2.1.1
 - Add an "All" button to manually congratulate everyone in the list (button is disabled if only one name is shown).
 - Move "Congratulatory Message" option to the bottom, increase width to "full".
