@@ -1,8 +1,8 @@
-## Interface: 30100
+## Interface: 30200
 ## Title: Accomplishment
 ## Notes: Allows for easy congratulating when someone earns an Achievement
 ## Author: Ethan Centaurai
-## Version: 2.1.2
+## Version: 2.1.3
 ## SavedVariables: AccomplishmentDB
 ## OptionalDeps: Ace3
 
