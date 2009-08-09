@@ -1,4 +1,4 @@
-﻿
+
 Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment", "AceTimer-3.0")
 
 local playerLanguage =  GetDefaultLanguage("player")

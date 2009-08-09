@@ -1,4 +1,4 @@
-﻿## Interface: 30100
+## Interface: 30100
 ## Title: Accomplishment
 ## Notes: Allows for easy congratulating when someone earns an Achievement
 ## Author: Ethan Centaurai
