@@ -109,6 +109,7 @@ local function buttOnClick(self, button)
 end
 
 local function OnEvent(self, event, achievement, name)
+	name = Ambiguate(name, "none")
 	if name == playerName then return end -- we don't want to congratulate ourselves
 
 	local channel
