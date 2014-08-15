@@ -1,5 +1,5 @@
 
-Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment")
+local Accomplishment = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 
 local playerLanguage =  GetDefaultLanguage("player")
 local playerName = UnitName("player")
@@ -7,35 +7,35 @@ local registry = {}
 local db, numShown
 local timer = false
 
-local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
-F:Hide()
-F:SetWidth(180)
-F:SetHeight(260)
-F:SetPoint("CENTER", UIParent, "CENTER")
-F:EnableMouse()
-F:SetMovable(true)
-F:SetFrameStrata("FULLSCREEN_DIALOG")
-F:SetBackdrop({
+
+Accomplishment:Hide()
+Accomplishment:SetWidth(180)
+Accomplishment:SetHeight(260)
+Accomplishment:SetPoint("CENTER", UIParent, "CENTER")
+Accomplishment:EnableMouse()
+Accomplishment:SetMovable(true)
+Accomplishment:SetFrameStrata("FULLSCREEN_DIALOG")
+Accomplishment:SetBackdrop({
 	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
 	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
 	tile = true, tileSize = 32, edgeSize = 32,
 	insets = { left = 8, right = 8, top = 8, bottom = 8 },
 })
-F:SetBackdropColor(0, 0, 0, 1)
-F:SetToplevel(true)
-F:SetScript("OnDragStart", function(self) self:StartMoving() end)
-F:SetScript("OnMouseDown", function(self) self:StartMoving() end)
-F:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() self:SetUserPlaced(true) end)
-F:RegisterForDrag("LeftButton")
+Accomplishment:SetBackdropColor(0, 0, 0, 1)
+Accomplishment:SetToplevel(true)
+Accomplishment:SetScript("OnDragStart", function(self) self:StartMoving() end)
+Accomplishment:SetScript("OnMouseDown", function(self) self:StartMoving() end)
+Accomplishment:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() self:SetUserPlaced(true) end)
+Accomplishment:RegisterForDrag("LeftButton")
 
-local BG = F:CreateTexture(nil, "OVERLAY")
+local BG = Accomplishment:CreateTexture(nil, "OVERLAY")
 BG:SetTexture("Interface\\DialogFrame\\UI-DialogBox-Header")
-BG:SetPoint("CENTER", F, "TOP", 0, -20)
+BG:SetPoint("CENTER", Accomplishment, "TOP", 0, -20)
 BG:SetWidth(275)
 BG:SetHeight(70)
 
-local Title = F:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-Title:SetPoint("CENTER", F, "TOP", 0, -7)
+local Title = Accomplishment:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+Title:SetPoint("CENTER", Accomplishment, "TOP", 0, -7)
 Title:SetText("Accomplishment")
 
 
@@ -43,19 +43,19 @@ local function close()
 	for key, value in pairs(registry) do registry[key] = nil end
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
-	F:Hide()
+	Accomplishment:Hide()
 end
 
 
-local CB = CreateFrame("Button", nil, F, "UIPanelButtonTemplate")
-CB:SetPoint("BOTTOMLEFT", F, "BOTTOM", 0, 12)
+local CB = CreateFrame("Button", nil, Accomplishment, "UIPanelButtonTemplate")
+CB:SetPoint("BOTTOMLEFT", Accomplishment, "BOTTOM", 0, 12)
 CB:SetHeight(20)
 CB:SetWidth(70)
 CB:SetText("Close")
 CB:SetScript("OnClick", close)
 
-local AB = CreateFrame("Button", nil, F, "UIPanelButtonTemplate")
-AB:SetPoint("BOTTOMRIGHT", F, "BOTTOM", 0, 12)
+local AB = CreateFrame("Button", nil, Accomplishment, "UIPanelButtonTemplate")
+AB:SetPoint("BOTTOMRIGHT", Accomplishment, "BOTTOM", 0, 12)
 AB:SetHeight(20)
 AB:SetWidth(70)
 AB:SetText("All")
@@ -87,10 +87,10 @@ local function updateDisplay()
 		if numShown > 1 then AB:Enable()
 		else AB:Disable() end
 
-		F:SetHeight((20*numShown) +60)
-		F:Show()
+		Accomplishment:SetHeight((20*numShown) +60)
+		Accomplishment:Show()
 	else
-		F:Hide()
+		Accomplishment:Hide()
 	end
 end
 
@@ -131,9 +131,14 @@ end
 
 
 function Accomplishment:OnEnable()
-	self.db = LibStub("AceDB-3.0"):New("AccomplishmentDB", { profile = { guildieGrats = true, strangerGrats = false, whisper = false, autoGrats = false, message = "Congratulations %s!", numToShow = 5 }}, "Default")
+	self:UnregisterEvent("PLAYER_LOGIN")
 
-	db = self.db.profile
+	db = LibStub("AceDB-3.0"):New("AccomplishmentDB", {
+		profile = {
+			guildieGrats = true, strangerGrats = false, whisper = false,
+			autoGrats = false, message = "Congratulations %s!", numToShow = 5
+		}
+	}, "Default").profile
 
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("Accomplishment", {
 		name = "Accomplishment",
@@ -149,8 +154,8 @@ function Accomplishment:OnEnable()
 				set = function(_, value)
 					db.guildieGrats = value
 
-					if value then F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
-					else F:UnregisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
+					if value then self:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT")
+					else self:UnregisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
 				end,
 			},
 			strangerGrats = {
@@ -160,8 +165,8 @@ function Accomplishment:OnEnable()
 				set = function(_, value)
 					db.strangerGrats = value
 
-					if value then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT")
-					else F:UnregisterEvent("CHAT_MSG_ACHIEVEMENT") end
+					if value then self:RegisterEvent("CHAT_MSG_ACHIEVEMENT")
+					else self:UnregisterEvent("CHAT_MSG_ACHIEVEMENT") end
 				end,
 			},
 			whisper = {
@@ -191,12 +196,12 @@ function Accomplishment:OnEnable()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
 
 	for i=1, 20 do
-		local butt = CreateFrame("Button", "AccomplishmentButton"..i, F)
+		local butt = CreateFrame("Button", "AccomplishmentButton"..i, self) -- I'm a mature adult, honest!
 		butt:Hide()
 		butt:SetWidth(150)
 		butt:SetHeight(20)
 		butt:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
-		butt:SetPoint("TOP", F, "TOP", 0, (-20*i) -5)
+		butt:SetPoint("TOP", self, "TOP", 0, (-20*i) -5)
 		butt:RegisterForClicks("LeftButtonDown", "RightButtonDown")
 		butt:SetScript("OnClick", buttOnClick)
 
@@ -205,10 +210,10 @@ function Accomplishment:OnEnable()
 		text:SetPoint("CENTER", butt, "CENTER")
 	end
 
-	if db.guildieGrats then F:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
-	if db.strangerGrats then F:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
-
-	F:SetScript("OnEvent", OnEvent)
+	if db.guildieGrats then self:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
+	if db.strangerGrats then self:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
+	
+	self:SetScript("OnEvent", OnEvent)
 end
 
 
@@ -279,3 +284,7 @@ function Accomplishment:Throttle()
 		timer = true
 	end
 end
+
+
+Accomplishment:RegisterEvent("PLAYER_LOGIN")
+Accomplishment:SetScript("OnEvent", Accomplishment.OnEnable)
