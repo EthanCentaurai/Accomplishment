@@ -1,10 +1,11 @@
 
-Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment", "AceTimer-3.0")
+Accomplishment = LibStub("AceAddon-3.0"):NewAddon("Accomplishment")
 
 local playerLanguage =  GetDefaultLanguage("player")
 local playerName = UnitName("player")
 local registry = {}
-local db, numShown, timer
+local db, numShown
+local timer = false
 
 local F = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 F:Hide()
@@ -64,7 +65,7 @@ AB:SetScript("OnClick", function()
 end)
 
 
-local function updateDisplay() -- ugly hackjob, but it Works(TM)
+local function updateDisplay()
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
 	local i = 0
@@ -217,7 +218,8 @@ end
 function Accomplishment:Congratulate(name, channel, auto)
 	if auto then
 		if not timer then
-			timer = self:ScheduleTimer("Throttle", 3)
+			C_Timer.After(3, Accomplishment.Throttle)
+			timer = true
 		end
 	else
 		local message = db.message:format(name)
@@ -235,10 +237,7 @@ end
 
 local channels = {}
 function Accomplishment:Throttle()
-	timer = nil
-
---	Prat.PrintLiteral(registry)
-
+	timer = false
 	wipe(channels)
 
 	for k, v in pairs(registry) do 
@@ -248,10 +247,7 @@ function Accomplishment:Throttle()
 		c[#c+1] = k
 	end 
     
---	Prat.PrintLiteral(channels)
-
 	local channel, names = next(channels)
-
 	if not channel then return end
 
 	channels[channel] = nil
@@ -279,6 +275,7 @@ function Accomplishment:Throttle()
 	for k, v in pairs(names) do registry[v] = nil end
 
 	if next(channels) then
-		timer = self:ScheduleTimer("Throttle", 3)
+		C_Timer.After(3, Accomplishment.Throttle)
+		timer = true
 	end
 end
