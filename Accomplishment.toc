@@ -2,7 +2,7 @@
 ## Title: Accomplishment
 ## Notes: Allows for easy congratulating when someone earns an achievement.
 ## Author: Ethan Centaurai
-## Version: 2.1.4
+## Version: @project-version@
 ## SavedVariables: AccomplishmentDB
 ## OptionalDeps: Ace3
 ## LoadManagers: AddonLoader
