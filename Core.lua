@@ -1,7 +1,7 @@
 
 local Accomplishment = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
 
-local playerLanguage =  GetDefaultLanguage("player")
+local playerLanguage = GetDefaultLanguage("player")
 local playerName = UnitName("player")
 local registry = {}
 local db, numShown
@@ -72,7 +72,7 @@ local function updateDisplay()
 	for name, channel in pairs(registry) do
 		i = i +1
 
-		local butt =  _G["AccomplishmentButton"..i]
+		local butt = _G["AccomplishmentButton"..i]
 
 		butt.type = channel or "SAY"
 		butt.text:SetText(name)
@@ -190,7 +190,7 @@ function Accomplishment:OnEnable()
 				desc = "Choose what to say to the user. Use '%s' where you want the user's name to be.",
 				type = "input", width = "full", order = 6, arg = "message",
 			},
-		}, 
+		},
 	})
 
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Accomplishment", "Accomplishment")
@@ -212,7 +212,7 @@ function Accomplishment:OnEnable()
 
 	if db.guildieGrats then self:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT") end
 	if db.strangerGrats then self:RegisterEvent("CHAT_MSG_ACHIEVEMENT") end
-	
+
 	self:SetScript("OnEvent", OnEvent)
 end
 
@@ -245,13 +245,13 @@ function Accomplishment:Throttle()
 	timer = false
 	wipe(channels)
 
-	for k, v in pairs(registry) do 
+	for k, v in pairs(registry) do
 		channels[v] = channels[v] or {}
 
-		local c = channels[v]        
+		local c = channels[v]
 		c[#c+1] = k
-	end 
-    
+	end
+
 	local channel, names = next(channels)
 	if not channel then return end
 
@@ -259,7 +259,7 @@ function Accomplishment:Throttle()
 
 	if #names > db.numToShow then
 		local message = db.message:format("guys")
-    
+
 		if channel ~= "WHISPER" then
 			SendChatMessage(message, channel)
 		end
@@ -268,7 +268,7 @@ function Accomplishment:Throttle()
 	else
 		for _, name in pairs(names) do
 			local message = db.message:format(name)
-        
+
 			if channel == "WHISPER" then
 				SendChatMessage(message, channel, playerLanguage, name)
 			else
