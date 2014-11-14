@@ -40,7 +40,7 @@ Title:SetText("Accomplishment")
 
 
 local function close()
-	for key, value in pairs(registry) do registry[key] = nil end
+	for key in pairs(registry) do registry[key] = nil end
 	for i=1, 20 do _G["AccomplishmentButton"..i]:Hide() end
 
 	Accomplishment:Hide()
@@ -109,7 +109,7 @@ local function buttOnClick(self, button)
 	updateDisplay()
 end
 
-local function OnEvent(self, event, achievement, name)
+local function OnEvent(self, event, _, name)
 	name = Ambiguate(name, "none")
 	if name == playerName then return end -- we don't want to congratulate ourselves
 
@@ -266,7 +266,7 @@ function Accomplishment:Throttle()
 	elseif #names > 1 and #names <= db.numToShow then
 		SendChatMessage(db.message:format(table.concat(names, ", ")), channel)
 	else
-		for i, name in pairs(names) do
+		for _, name in pairs(names) do
 			local message = db.message:format(name)
         
 			if channel == "WHISPER" then
@@ -277,7 +277,7 @@ function Accomplishment:Throttle()
 		end
 	end
 
-	for k, v in pairs(names) do registry[v] = nil end
+	for _, v in pairs(names) do registry[v] = nil end
 
 	if next(channels) then
 		C_Timer.After(3, Accomplishment.Throttle)
