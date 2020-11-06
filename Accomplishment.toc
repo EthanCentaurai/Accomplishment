@@ -10,6 +10,8 @@
 ## X-LoadOn-CHAT_MSG_GUILD_ACHIEVEMENT: LoadAddOn("Accomplishment")
 ## X-LoadOn-CHAT_MSG_ACHIEVEMENT: LoadAddOn("Accomplishment")
 ## X-LoadOn-InterfaceOptions: Accomplishment
+## X-Curse-Project-ID: 16452
+## X-WoWI-ID: 11566
 
 #@no-lib-strip@
 Lib\LibStub\LibStub.lua
