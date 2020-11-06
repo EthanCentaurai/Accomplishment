@@ -1,5 +1,5 @@
 
-local Accomplishment = CreateFrame("Frame", "AccomplishmentFrame", UIParent)
+local Accomplishment = CreateFrame("Frame", "AccomplishmentFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 
 local playerLanguage = GetDefaultLanguage("player")
 local playerName = UnitName("player")

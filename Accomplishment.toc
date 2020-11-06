@@ -1,7 +1,7 @@
-## Interface: 60200
+## Interface: 90001
 ## Title: Accomplishment
 ## Notes: Allows for easy congratulating when someone earns an achievement.
-## Author: Ethan Centaurai
+## Author: Ravendwyr
 ## Version: @project-version@
 ## SavedVariables: AccomplishmentDB
 ## OptionalDeps: Ace3
