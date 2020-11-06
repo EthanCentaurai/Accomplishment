@@ -3,7 +3,7 @@
 Automatically congratulate players when they earn an achievement.
 
 [![Builder](https://img.shields.io/travis/com/ravendwyr/accomplishment.svg?label=Build&logo=travis&maxAge=600&style=popout)](https://travis-ci.com/github/Ravendwyr/Accomplishment)
-[![Version](https://img.shields.io/github/tag-date/ravendwyr/accomplishment.svg?label=Version&logo=codeigniter&maxAge=600&style=popout)](https://www.curseforge.com/wow/addons/accomplishment/files/all)
+[![Version](https://img.shields.io/github/tag-date/ravendwyr/accomplishment.svg?label=Version&logo=curseforge&maxAge=600&style=popout)](https://www.curseforge.com/wow/addons/accomplishment/files/all)
 [![Tracker](https://img.shields.io/github/issues/ravendwyr/accomplishment.svg?label=Issues&logo=github&maxAge=600&style=popout)](https://github.com/Ravendwyr/Accomplishment/issues)
 
 ***
@@ -20,7 +20,7 @@ Features:
 - Right-click the name to remove it from the list.
 - Clicking "Close" hides the window and removes all names from the list.
 - Window resizes whenever new names are added or removed. It starts off small and unobtrusive but gets bigger with each new name added.
-- Window can be moved about and remembers it's position (saved in layout-cache.txt).
+- Window can be moved about and remembers its position (saved in `layout-local.txt`).
 - Congratulatory message is customisable. Use `%s` where you want the user's name to appear (or not, if you wish).
 - If you prefer, you can choose to congratulate automatically instead of clicking a button.
 
