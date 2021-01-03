@@ -140,7 +140,7 @@ function Accomplishment:OnEnable()
 		}
 	}, "Default").profile
 
-	LibStub("AceConfig-3.0"):RegisterOptionsTable("Accomplishment", {
+	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Accomplishment", {
 		name = "Accomplishment",
 		desc = "Allows for easy congratulations for when someone earns an Achievement.",
 		type = "group",

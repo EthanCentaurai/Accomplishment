@@ -18,7 +18,8 @@ Lib\LibStub\LibStub.lua
 Lib\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Lib\AceDB-3.0\AceDB-3.0.lua
 Lib\AceGUI-3.0\AceGUI-3.0.xml
-Lib\AceConfig-3.0\AceConfig-3.0.xml
+Lib\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua
+Lib\AceConfigDialog-3.0\AceConfigDialog-3.0.lua
 #@end-no-lib-strip@
 
 Core.lua
