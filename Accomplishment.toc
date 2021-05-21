@@ -12,6 +12,7 @@
 ## X-LoadOn-InterfaceOptions: Accomplishment
 ## X-Curse-Project-ID: 16452
 ## X-WoWI-ID: 11566
+## X-Wago-ID: rkGrzAGy
 
 #@no-lib-strip@
 Lib\LibStub\LibStub.lua
